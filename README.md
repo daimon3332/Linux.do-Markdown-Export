@@ -154,6 +154,12 @@ https://linux.do/t/123456
 - 页面交互与样式
 - 其他 Discourse 论坛支持
 
+
+## 🔗 友情链接 
+
+- **[linux.do](https://linux.do)** ：学AI，上L站！！！
+
+
 ## 📌 免责声明
 
 本项目仅用于个人内容整理、学习与备份。
@@ -163,11 +169,5 @@ https://linux.do/t/123456
 ---
 
 <div align="center">
-
-## 🔗 友情链接 / Community
-
-- **[linux.do](https://linux.do)** — 新的理想型社区 / a thriving developer community.：学AI，上L站！！！
-
 如果这个项目对你有帮助，欢迎点一个 ⭐ Star。
-
 </div>
