@@ -164,6 +164,10 @@ https://linux.do/t/123456
 
 <div align="center">
 
+## 🔗 友情链接 / Community
+
+- **[linux.do](https://linux.do)** — 新的理想型社区 / a thriving developer community.：学AI，上L站！！！
+
 如果这个项目对你有帮助，欢迎点一个 ⭐ Star。
 
 </div>
