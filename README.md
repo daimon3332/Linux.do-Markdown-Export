@@ -171,3 +171,6 @@ https://linux.do/t/123456
 <div align="center">
 如果这个项目对你有帮助，欢迎点一个 ⭐ Star。
 </div>
+
+## 友情链接
+* [linux.do](https://linux.do)：学AI，上L站！！！
