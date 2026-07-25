@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Linux.do Markdown 导出器
 // @namespace    https://linux.do/
-// @version      1.1.0
+// @version      1.1.2
 // @description  导出 linux.do 帖子为 Markdown 格式
 // @match        https://linux.do/t/*
 // @run-at       document-idle
@@ -105,6 +105,16 @@
     try { return new URL(src, location.origin).href; } catch { return src; }
   }
 
+  function isHeadingAnchor(href) {
+    if (!href) return false;
+    try {
+      const url = new URL(href, location.origin);
+      return url.origin === location.origin && /^#p-\d+-h-\d+$/.test(url.hash);
+    } catch {
+      return false;
+    }
+  }
+
   function escapeText(s) {
     return s.replace(/\\/g, '\\\\').replace(/[*_\[\]<>]/g, c => '\\' + c);
   }
@@ -129,17 +139,20 @@
         return `![${escapeText(alt)}](${src})`;
       }
       case 'a': {
+        const rawHref = el.getAttribute('href') || '';
+        if (isHeadingAnchor(rawHref)) return '';
+
         // 如果链接包含图片，直接输出图片（使用链接的 href 作为图片源，通常是原图）
         const img = el.querySelector('img');
         if (img) {
-          const href = resolveUrl(el.getAttribute('href') || '');
+          const href = resolveUrl(rawHref);
           const alt = img.getAttribute('alt') || '';
           const src = href || resolveUrl(img.getAttribute('src') || '');
           return `![${escapeText(alt)}](${src})`;
         }
-        const href = resolveUrl(el.getAttribute('href') || '');
-        const text = children().trim() || href;
-        return href ? `[${text}](${href})` : text;
+        const href = resolveUrl(rawHref);
+        const text = children().trim();
+        return href && text ? `[${text}](${href})` : text;
       }
       case 'code':
         if (el.parentElement?.tagName.toLowerCase() !== 'pre') {
@@ -199,7 +212,7 @@
     const mainPost = posts[0];
     const mainMd = normalizeMd(htmlToMd(parseCooked(mainPost.cooked)));
 
-    let result = `# ${title}\n${url}\n\n${mainMd}`;
+    let result = `# ${title}\n\n## ${url}\n\n${mainMd}`;
 
     if (includeComments && posts.length > 1) {
       result += '\n\n---\n\n';

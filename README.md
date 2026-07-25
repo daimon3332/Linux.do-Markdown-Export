@@ -94,7 +94,7 @@
 ```markdown
 # 帖子标题
 
-https://linux.do/t/123456
+## https://linux.do/t/123456
 
 帖子正文内容……
 
