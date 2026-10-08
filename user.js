@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Linux.do Markdown 导出器
 // @namespace    https://linux.do/
-// @version      1.1.2
+// @version      1.1.3
 // @description  导出 linux.do 帖子为 Markdown 格式
 // @match        https://linux.do/t/*
 // @run-at       document-idle
@@ -29,10 +29,17 @@
   }
 
   // ========== API 请求 ==========
+  async function fetchJson(url, errorPrefix) {
+    const res = await fetch(url, {
+      credentials: 'include',
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    });
+    if (!res.ok) throw new Error(`${errorPrefix}: ${res.status}`);
+    return res.json();
+  }
+
   async function fetchTopic(topicId) {
-    const res = await fetch(`/t/${topicId}.json`, { credentials: 'include' });
-    if (!res.ok) throw new Error(`获取帖子失败: ${res.status}`);
-    const data = await res.json();
+    const data = await fetchJson(`/t/${topicId}.json`, '获取帖子失败');
     if (!data?.post_stream) throw new Error('帖子数据格式异常');
     return data;
   }
@@ -40,9 +47,7 @@
   async function fetchPostsByIds(topicId, postIds) {
     if (!postIds.length) return [];
     const params = postIds.map(id => `post_ids[]=${id}`).join('&');
-    const res = await fetch(`/t/${topicId}/posts.json?${params}`, { credentials: 'include' });
-    if (!res.ok) throw new Error(`加载帖子失败: ${res.status}`);
-    const data = await res.json();
+    const data = await fetchJson(`/t/${topicId}/posts.json?${params}`, '加载帖子失败');
     return data.post_stream?.posts || [];
   }
 
